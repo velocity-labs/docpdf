@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby: ["3.3", "3.4", "4.0"]
+        appraisal: [all, hexapdf_only, prawn_combine_pdf, rmagick, mini_magick, no_adapters]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libreoffice-core libreoffice-writer imagemagick libmagickwand-dev ghostscript
+          sudo sed -i 's/rights="none" pattern="PDF"/rights="read|write" pattern="PDF"/' /etc/ImageMagick-6/policy.xml || true
+      - name: Install appraisal dependencies
+        run: bundle exec appraisal ${{ matrix.appraisal }} bundle install
+      - name: Run tests
+        run: bundle exec appraisal ${{ matrix.appraisal }} rake test
