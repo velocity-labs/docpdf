@@ -14,7 +14,7 @@ jobs:
         ruby: ["3.3", "3.4", "4.0"]
         appraisal: [all, hexapdf-only, prawn-combine-pdf, rmagick, mini-magick, no-adapters]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
