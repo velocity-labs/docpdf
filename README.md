@@ -1,16 +1,17 @@
-<table><tr><td valign="top" width="200">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset=".github/logo-dark.svg">
-    <img src=".github/logo-light.svg" alt="DocPDF" width="200">
-  </picture>
-</td><td>
-  <h1>DocPDF</h1>
-  <p>Convert documents from any common format to PDF, with optional watermarking. Zero hard dependencies; bring your own PDF library.</p>
-  <p>
-    <a href="https://github.com/velocity-labs/docpdf/actions/workflows/ci.yml"><img src="https://github.com/velocity-labs/docpdf/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-    <a href="https://rubygems.org/gems/docpdf"><img src="https://badge.fury.io/rb/docpdf.svg" alt="Gem Version"></a>
-  </p>
-</td></tr></table>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/logo-dark.svg">
+  <img src=".github/logo-light.svg" alt="DocPDF" width="200" align="left">
+</picture>
+
+<br/>
+<br/>
+
+Convert documents from any common format to PDF, with optional watermarking. Zero hard dependencies; bring your own PDF library.
+
+[![CI](https://github.com/velocity-labs/docpdf/actions/workflows/ci.yml/badge.svg)](https://github.com/velocity-labs/docpdf/actions/workflows/ci.yml)
+[![Gem Version](https://badge.fury.io/rb/docpdf.svg)](https://rubygems.org/gems/docpdf)
+
+<br clear="left">
 
 ## Supported Formats
 
