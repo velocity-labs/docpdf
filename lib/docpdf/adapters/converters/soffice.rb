@@ -30,8 +30,11 @@ module DocPDF
                 tempfile.rewind
 
                 soffice = DocPDF.configuration.soffice_path
+                profile_dir = File.join(output_dir, "profile")
                 stderr_path = File.join(output_dir, "stderr.log")
-                success = system(soffice, "--headless", "--convert-to", "pdf",
+                success = system(soffice, "--headless",
+                                 "-env:UserInstallation=file://#{profile_dir}",
+                                 "--convert-to", "pdf",
                                  "--outdir", output_dir, tempfile.path,
                                  out: File::NULL, err: stderr_path)
 

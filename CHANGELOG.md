@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.1.2] - 2026-04-04
+
+### Fixed
+- Concurrent LibreOffice conversions no longer conflict. Each conversion uses an isolated user profile directory via `-env:UserInstallation`, preventing lock file collisions under load.
+
 ## [0.1.1] - 2026-04-03
 
 ### Fixed

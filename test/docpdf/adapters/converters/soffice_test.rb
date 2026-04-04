@@ -27,6 +27,18 @@ class ConverterSofficeTest < Minitest::Test
     script&.unlink
   end
 
+  def test_concurrent_conversions_do_not_conflict
+    data = fixture_data("test.docx")
+    results = Array.new(3)
+    threads = 3.times.map do |i|
+      Thread.new { results[i] = DocPDF::Adapters::Converters::Soffice.convert(data, "test.docx") }
+    end
+    threads.each(&:join)
+    results.each_with_index do |result, i|
+      assert valid_pdf?(result), "Concurrent conversion #{i} failed"
+    end
+  end
+
   def test_raises_soffice_not_found_when_not_installed
     DocPDF.configure { |c| c.soffice_path = "/nonexistent/soffice" }
     assert_raises(DocPDF::SofficeNotFoundError) do
