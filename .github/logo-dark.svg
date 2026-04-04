@@ -1,0 +1,55 @@
+<svg viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
+  <!-- Light navy: #E6EEF6 -->
+  <!-- Gold: #D4AF37 -->
+
+  <circle cx="500" cy="500" r="350"
+          fill="none"
+          stroke="#E6EEF6"
+          stroke-width="18"/>
+
+  <circle cx="500" cy="500" r="350"
+          fill="none"
+          stroke="#E6EEF6"
+          stroke-width="18"
+          opacity="0.15"
+          transform="translate(3,2)"/>
+
+  <text x="500" y="430"
+        text-anchor="middle"
+        font-family="Georgia, serif"
+        font-size="140"
+        font-weight="700"
+        fill="#E6EEF6">
+    DocPDF
+  </text>
+
+  <line x1="220" y1="500" x2="390" y2="500"
+        stroke="#E6EEF6" stroke-width="10" stroke-linecap="round"/>
+  <line x1="610" y1="500" x2="780" y2="500"
+        stroke="#E6EEF6" stroke-width="10" stroke-linecap="round"/>
+
+  <path d="M500 540
+           C565 560, 610 560, 610 560
+           L610 650
+           C610 735, 535 780, 500 800
+           C465 780, 390 735, 390 650
+           L390 560
+           C390 560, 435 560, 500 540Z"
+        fill="#D4AF37"/>
+
+  <path d="M445 670 L485 710 L565 630"
+        fill="none"
+        stroke="#0F2A44"
+        stroke-width="20"
+        stroke-linecap="round"
+        stroke-linejoin="round"/>
+
+  <line x1="280" y1="650" x2="350" y2="650"
+        stroke="#E6EEF6" stroke-width="8" stroke-linecap="round"/>
+  <line x1="280" y1="680" x2="350" y2="680"
+        stroke="#E6EEF6" stroke-width="8" stroke-linecap="round"/>
+  <line x1="650" y1="650" x2="720" y2="650"
+        stroke="#E6EEF6" stroke-width="8" stroke-linecap="round"/>
+  <line x1="650" y1="680" x2="720" y2="680"
+        stroke="#E6EEF6" stroke-width="8" stroke-linecap="round"/>
+</svg>
