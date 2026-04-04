@@ -11,7 +11,7 @@ module DocPDF
     end
 
     def call
-      data = ConverterResolver.resolve(@input.mime_type).convert(@input.data, @input.source_filename)
+      data = ConverterResolver.resolve(@input.mime_type).convert(@input.data, @input.source_filename || @input.filename)
       filename = build_filename(@input.filename)
       Result.new(data: data, filename: filename)
     end

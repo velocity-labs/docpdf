@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.1.1] - 2026-04-03
+
+### Fixed
+- Fallback converter not detecting image extensions when using `data:` input with a `filename:` hint
+
 ## [0.1.0] - 2026-04-03
 
 Initial release.

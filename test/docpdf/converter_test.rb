@@ -180,6 +180,13 @@ class ConverterTest < Minitest::Test
       assert valid_pdf?(result.data)
     end
 
+    def test_unknown_mime_with_image_extension_without_soffice
+      DocPDF.configure { |c| c.soffice_path = "/nonexistent/soffice" }
+      data = fixture_data("test.png")
+      result = DocPDF.convert(data: data, mime_type: "application/x-unknown", filename: "photo.png")
+      assert valid_pdf?(result.data)
+    end
+
     def test_webp_produces_valid_pdf
       assert valid_pdf?(DocPDF.convert(fixture_path("test.webp")).data)
     end
