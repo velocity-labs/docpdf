@@ -10,13 +10,7 @@ module DocPDF
       def resolve
         configured = DocPDF.configuration.stamper
         if configured
-          entry = @adapters.find { |e| e[:name] == configured }
-          raise AdapterNotFoundError, "Unknown stamper: #{configured}" unless entry
-          begin
-            entry[:loader].call
-          rescue LoadError => e
-            raise AdapterNotFoundError, "Stamper '#{configured}' requires gems that are not available: #{e.message}"
-          end
+          resolve_configured(configured)
         else
           auto_detect
         end
@@ -30,7 +24,19 @@ module DocPDF
         rescue LoadError
           next
         end
-        raise AdapterNotFoundError, "No stamper available. Add 'hexapdf' or 'combine_pdf' (with 'prawn') to your Gemfile."
+        names = @adapters.map { |e| "'#{e[:name]}'" }.join(" or ")
+        raise AdapterNotFoundError, "No stamper available. Add #{names} to your Gemfile."
+      end
+
+      def resolve_configured(name)
+        entry = @adapters.find { |e| e[:name] == name }
+        valid_names = @adapters.map { |e| e[:name].inspect }.join(", ")
+        raise AdapterNotFoundError, "Unknown stamper: #{name.inspect}. Valid stampers are: #{valid_names}." unless entry
+        begin
+          entry[:loader].call
+        rescue LoadError => e
+          raise AdapterNotFoundError, "Stamper #{name.inspect} requires gems that are not installed: #{e.message}"
+        end
       end
     end
 

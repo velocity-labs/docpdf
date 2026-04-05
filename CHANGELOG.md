@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.3] - 2026-04-04
+
+### Improved
+- Error messages now include the mime type that failed and which gems to install
+- Unknown stamper errors list valid options from the registry
+- All gem names in error messages are pulled from the registry, not hardcoded
+
 ## [0.1.2] - 2026-04-04
 
 ### Fixed

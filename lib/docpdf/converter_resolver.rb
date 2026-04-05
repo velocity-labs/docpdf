@@ -8,13 +8,22 @@ module DocPDF
       end
 
       def resolve(mime_type)
+        missing_gems = []
+
         @adapters.each do |entry|
           next unless entry[:mime_types].include?(mime_type)
           require entry[:require_name] if entry[:require_name]
           return entry[:loader].call
         rescue LoadError
+          missing_gems << entry[:require_name]
           next
         end
+
+        if missing_gems.any?
+          gem_list = missing_gems.map { |g| "'#{g}'" }.join(" or ")
+          raise AdapterNotFoundError, "No converter found for #{mime_type}. Install #{gem_list} and add it to your Gemfile."
+        end
+
         resolve_fallback
       end
 
@@ -22,7 +31,7 @@ module DocPDF
 
       def resolve_fallback
         entry = @adapters.find { |e| e[:name] == :fallback }
-        raise AdapterNotFoundError, "No converter found and no fallback registered" unless entry
+        raise AdapterNotFoundError, "No converter found and no fallback registered." unless entry
         entry[:loader].call
       end
     end

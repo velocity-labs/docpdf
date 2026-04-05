@@ -55,16 +55,18 @@ class ConverterResolverTest < Minitest::Test
   end
 
   unless TEXT_CONVERTER_AVAILABLE
-    def test_resolves_fallback_for_text_when_no_text_converters
-      adapter = DocPDF::ConverterResolver.resolve("text/plain")
-      assert_equal "DocPDF::Adapters::Converters::Fallback", adapter.name
+    def test_raises_with_gem_suggestion_for_text_when_no_text_converters
+      error = assert_raises(DocPDF::AdapterNotFoundError) { DocPDF::ConverterResolver.resolve("text/plain") }
+      assert_match(/text\/plain/, error.message)
+      assert_match(/prawn/, error.message)
     end
   end
 
   unless IMAGE_CONVERTER_AVAILABLE
-    def test_resolves_fallback_for_images_when_no_image_converters
-      adapter = DocPDF::ConverterResolver.resolve("image/jpeg")
-      assert_equal "DocPDF::Adapters::Converters::Fallback", adapter.name
+    def test_raises_with_gem_suggestion_for_images_when_no_image_converters
+      error = assert_raises(DocPDF::AdapterNotFoundError) { DocPDF::ConverterResolver.resolve("image/jpeg") }
+      assert_match(/image\/jpeg/, error.message)
+      assert_match(/rmagick/, error.message)
     end
   end
 end
@@ -91,14 +93,19 @@ class StamperResolverTest < Minitest::Test
     end
   end
 
-  def test_raises_for_unknown_stamper
+  def test_raises_for_unknown_stamper_with_valid_options
     DocPDF.configure { |c| c.stamper = :nonexistent }
-    assert_raises(DocPDF::AdapterNotFoundError) { DocPDF::StamperResolver.resolve }
+    error = assert_raises(DocPDF::AdapterNotFoundError) { DocPDF::StamperResolver.resolve }
+    assert_match(/Unknown stamper/, error.message)
+    assert_match(/hexapdf/, error.message)
+    assert_match(/combine_pdf/, error.message)
   end
 
   unless STAMPER_AVAILABLE
-    def test_raises_when_no_stampers_available
-      assert_raises(DocPDF::AdapterNotFoundError) { DocPDF::StamperResolver.resolve }
+    def test_raises_when_no_stampers_available_with_gem_suggestions
+      error = assert_raises(DocPDF::AdapterNotFoundError) { DocPDF::StamperResolver.resolve }
+      assert_match(/No stamper available/, error.message)
+      assert_match(/hexapdf/, error.message)
     end
   end
 
