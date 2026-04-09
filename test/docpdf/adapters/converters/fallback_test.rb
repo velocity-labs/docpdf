@@ -2,6 +2,12 @@ require "test_helper"
 require "docpdf/adapters/converters/fallback"
 
 class ConverterFallbackTest < Minitest::Test
+  def test_loads_soffice_without_full_library
+    script = 'require "docpdf/adapters/converters/fallback"; puts "ok"'
+    output = IO.popen([RbConfig.ruby, "-I", "lib", "-e", script], err: [:child, :out], &:read)
+    assert_equal "ok", output.strip, "Fallback should load Soffice on its own: #{output}"
+  end
+
   def test_returns_raw_data_for_unknown_format_without_soffice
     DocPDF.configure { |c| c.soffice_path = "/nonexistent/soffice" }
     result = DocPDF::Adapters::Converters::Fallback.convert("raw data", "file.xyz")

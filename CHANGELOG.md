@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.1.4] - 2026-04-08
+
+### Fixed
+- Fallback converter raised `NameError: uninitialized constant Soffice` when loaded without the full library (e.g. via lazy `ConverterResolver`)
+
 ## [0.1.3] - 2026-04-04
 
 ### Improved
