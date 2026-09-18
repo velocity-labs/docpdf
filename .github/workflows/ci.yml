@@ -22,7 +22,7 @@ jobs:
       - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y libreoffice-core libreoffice-writer libreoffice-impress libreoffice-calc imagemagick libmagickwand-dev ghostscript
+          sudo apt-get install -y libreoffice-core libreoffice-writer libreoffice-impress libreoffice-calc imagemagick libmagickwand-dev ghostscript libheif-plugin-libde265
           sudo sed -i 's/rights="none" pattern="PDF"/rights="read|write" pattern="PDF"/' /etc/ImageMagick-6/policy.xml || true
       - name: Install appraisal dependencies
         run: bundle exec appraisal ${{ matrix.appraisal }} bundle install
