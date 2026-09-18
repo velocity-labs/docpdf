@@ -13,14 +13,35 @@ if PRAWN_AVAILABLE
         "Unique prawn content 12345"
     end
 
+    def test_convert_line_separator_becomes_newline
+      content = pdf_text(DocPDF::Adapters::Converters::Prawn.convert("Line one Line two", nil))
+      assert_includes content, "Line one"
+      assert_includes content, "Line two"
+    end
+
     def test_convert_multi_line
       content = pdf_text(DocPDF::Adapters::Converters::Prawn.convert("Line one\nLine two\nLine three", nil))
       assert_includes content, "Line one"
       assert_includes content, "Line three"
     end
 
+    def test_convert_paragraph_separator_becomes_newline
+      content = pdf_text(DocPDF::Adapters::Converters::Prawn.convert("Para one Para two", nil))
+      assert_includes content, "Para one"
+      assert_includes content, "Para two"
+    end
+
     def test_convert_produces_valid_pdf
       assert valid_pdf?(DocPDF::Adapters::Converters::Prawn.convert("Hello from Prawn", nil))
+    end
+
+    # Prawn's built-in AFM fonts are Windows-1252 only. Text outside it still
+    # cannot render, but it must surface as a DocPDF error, not Prawn's.
+    def test_convert_raises_conversion_error_for_unsupported_characters
+      error = assert_raises(DocPDF::ConversionError) do
+        DocPDF::Adapters::Converters::Prawn.convert("Иванов", nil)
+      end
+      assert_match(/Prawn failed to render text/, error.message)
     end
 
     def test_convert_respects_configuration

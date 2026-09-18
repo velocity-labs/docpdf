@@ -7,6 +7,8 @@
 
 ### Fixed
 - Watermarking a structurally valid PDF with an empty page tree raised `NoMethodError` instead of a `DocPDF::ConversionError`. Both stampers and the per-page watermark path now raise `ConversionError` with a clear message.
+- Plain text containing U+2028 LINE SEPARATOR or U+2029 PARAGRAPH SEPARATOR crashed the Prawn converter, since Windows-1252 has no room for them. Both are now translated to a newline, which is what they mean, so text pasted out of word processors and web pages converts cleanly.
+- Adapters no longer leak third-party exceptions to callers rescuing `DocPDF::Error`. The Prawn converter wraps every `Prawn::Errors` class plus `Encoding::UndefinedConversionError`, and both stampers wrap a missing watermark image file.
 
 ## [0.1.4] - 2026-04-08
 

@@ -43,6 +43,12 @@ if HEXAPDF_AVAILABLE
       assert_match(/no pages/, error.message)
     end
 
+    def test_stamp_raises_when_image_file_is_missing
+      assert_raises(DocPDF::ConversionError) do
+        DocPDF::Adapters::Stampers::Hexapdf.stamp(sample_pdf, [stamp(image: "/nonexistent/watermark.png")])
+      end
+    end
+
     def test_stamp_symbol_page_size
       DocPDF.configure { |c| c.page_size = :Letter }
       result = DocPDF::Adapters::Stampers::Hexapdf.stamp(sample_pdf, [stamp])

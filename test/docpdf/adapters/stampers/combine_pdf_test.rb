@@ -36,11 +36,23 @@ if COMBINE_PDF_AVAILABLE && PRAWN_AVAILABLE
       assert valid_pdf?(result)
     end
 
+    def test_stamp_raises_for_unknown_font
+      assert_raises(DocPDF::ConversionError) do
+        DocPDF::Adapters::Stampers::CombinePdf.stamp(sample_pdf, [text_stamp(font: "NoSuchFont")])
+      end
+    end
+
     def test_stamp_raises_on_pdf_with_no_pages
       error = assert_raises(DocPDF::ConversionError) do
         DocPDF::Adapters::Stampers::CombinePdf.stamp(no_pages_pdf, [stamp])
       end
       assert_match(/no pages/, error.message)
+    end
+
+    def test_stamp_raises_when_image_file_is_missing
+      assert_raises(DocPDF::ConversionError) do
+        DocPDF::Adapters::Stampers::CombinePdf.stamp(sample_pdf, [stamp(image: "/nonexistent/watermark.png")])
+      end
     end
 
     def test_text_stamp_produces_valid_pdf

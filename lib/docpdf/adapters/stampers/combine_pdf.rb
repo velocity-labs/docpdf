@@ -1,6 +1,7 @@
 require "combine_pdf"
 require "prawn"
 require_relative "base"
+require_relative "../../prawn_errors"
 
 module DocPDF
   module Adapters
@@ -21,7 +22,7 @@ module DocPDF
               page << stamp_page if page_indices.nil? || page_indices.include?(idx)
             end
             source.to_pdf
-          rescue ::CombinePDF::ParsingError => e
+          rescue ::CombinePDF::ParsingError, *PRAWN_ERRORS, Errno::ENOENT => e
             raise ConversionError, "CombinePDF failed to stamp PDF: #{e.message}"
           end
 

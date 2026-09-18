@@ -22,7 +22,7 @@ module DocPDF
             end
 
             write_to_string(doc)
-          rescue HexaPDF::Error => e
+          rescue HexaPDF::Error, Errno::ENOENT => e
             raise ConversionError, "HexaPDF failed to stamp PDF: #{e.message}"
           end
 
