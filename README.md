@@ -9,7 +9,7 @@
 Convert documents from any common format to PDF, with optional watermarking. Zero hard dependencies; bring your own PDF library.
 
 [![CI](https://github.com/velocity-labs/docpdf/actions/workflows/ci.yml/badge.svg)](https://github.com/velocity-labs/docpdf/actions/workflows/ci.yml)
-[![Gem Version](https://img.shields.io/gem/v/docpdf)](https://rubygems.org/gems/docpdf)
+[![Gem Version](https://img.shields.io/gem/v/docpdf?label=gem%20version&color=D3AF37&cacheSeconds=3600)](https://rubygems.org/gems/docpdf)
 
 <br clear="left">
 
