@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.5] - 2026-09-18
 
 ### Added
 - `config.converter` selects a preferred converter adapter, mirroring `config.stamper`. It only claims the mime types that adapter registered for, so everything else still resolves in registration order and `config.converter = :hexapdf` does not disturb Word or image conversion.
