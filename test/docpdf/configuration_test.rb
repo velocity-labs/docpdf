@@ -29,6 +29,14 @@ class ConfigurationTest < Minitest::Test
     assert_nil DocPDF::Configuration.new.converter
   end
 
+  def test_nil_text_font_file_default
+    assert_nil DocPDF::Configuration.new.text_options[:font_file]
+  end
+
+  def test_nil_watermark_font_file_default
+    assert_nil DocPDF::Configuration.new.watermark_options[:font_file]
+  end
+
   def test_nil_stamper_default
     assert_nil DocPDF::Configuration.new.stamper
   end

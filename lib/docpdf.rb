@@ -1,6 +1,7 @@
 require "docpdf/version"
 require "docpdf/configuration"
 require "docpdf/errors"
+require "docpdf/font_files"
 require "docpdf/result"
 require "docpdf/input_normalizer"
 require "docpdf/mime_detector"

@@ -9,6 +9,7 @@ module DocPDF
 
     TEXT_DEFAULTS = {
       font: "Courier",
+      font_file: nil,
       font_size: 10,
       margins: [50, 50, 50, 50],
       color: "333333",
@@ -16,6 +17,7 @@ module DocPDF
 
     WATERMARK_DEFAULTS = {
       font: "Helvetica",
+      font_file: nil,
       font_size: 72,
       color: "AAAAAA",
       rotation: 45,

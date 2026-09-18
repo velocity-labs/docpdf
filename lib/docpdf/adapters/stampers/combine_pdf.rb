@@ -2,6 +2,7 @@ require "combine_pdf"
 require "prawn"
 require_relative "base"
 require_relative "../../prawn_errors"
+require_relative "../../font_files"
 
 module DocPDF
   module Adapters
@@ -62,6 +63,13 @@ module DocPDF
             [img_w, img_h]
           end
 
+          def register_font(pdf, name, font_file)
+            families = FontFiles.for_prawn(font_file)
+            return unless families
+
+            pdf.font_families.update(name => families)
+          end
+
           def render_image_stamp(pdf, stamp)
             page_w = pdf.bounds.width
             page_h = pdf.bounds.height
@@ -88,6 +96,7 @@ module DocPDF
             page_w = pdf.bounds.width
             page_h = pdf.bounds.height
 
+            register_font(pdf, stamp[:font], stamp[:font_file])
             pdf.font(stamp[:font])
             font_size = fit_font_size(stamp[:font_size], stamp[:text], pdf, page_w, page_h)
             text_w = pdf.width_of(stamp[:text], size: font_size)

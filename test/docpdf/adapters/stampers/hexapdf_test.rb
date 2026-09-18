@@ -73,6 +73,12 @@ if HEXAPDF_AVAILABLE
       end
     end
 
+    def test_text_stamp_renders_non_latin_text_with_a_font_file
+      result = DocPDF::Adapters::Stampers::Hexapdf.stamp(sample_pdf,
+        [text_stamp(text: cyrillic_text, font: "DejaVuSans", font_file: ttf_font_path)])
+      assert valid_pdf?(result)
+    end
+
     def test_text_stamp_with_rotation
       result = DocPDF::Adapters::Stampers::Hexapdf.stamp(sample_pdf, [text_stamp(rotation: 45)])
       assert valid_pdf?(result)

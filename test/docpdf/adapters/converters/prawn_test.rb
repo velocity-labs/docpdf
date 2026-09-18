@@ -44,6 +44,16 @@ if PRAWN_AVAILABLE
       assert_match(/Prawn failed to render text/, error.message)
     end
 
+    def test_convert_renders_non_latin_text_with_a_font_file
+      DocPDF.configure { |c| c.text_options = c.text_options.merge(font: "DejaVuSans", font_file: ttf_font_path) }
+      assert valid_pdf?(DocPDF::Adapters::Converters::Prawn.convert(cyrillic_text, nil))
+    end
+
+    def test_convert_accepts_a_font_file_style_hash
+      DocPDF.configure { |c| c.text_options = c.text_options.merge(font: "DejaVuSans", font_file: { normal: ttf_font_path }) }
+      assert valid_pdf?(DocPDF::Adapters::Converters::Prawn.convert(cyrillic_text, nil))
+    end
+
     def test_convert_respects_configuration
       DocPDF.configure { |c| c.page_size = "A4"; c.text_options = c.text_options.merge(font_size: 14) }
       assert valid_pdf?(DocPDF::Adapters::Converters::Prawn.convert("Configured text", nil))

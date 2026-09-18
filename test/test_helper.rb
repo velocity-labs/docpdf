@@ -25,6 +25,14 @@ def multi_page_pdf
   fixture_data("test_multipage.pdf")
 end
 
+def cyrillic_text
+  "Иванов"
+end
+
+def ttf_font_path
+  fixture_path("DejaVuSans.ttf")
+end
+
 def no_pages_pdf
   fixture_data("test_no_pages.pdf")
 end

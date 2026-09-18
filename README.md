@@ -208,6 +208,7 @@ DocPDF.configure do |config|
   # Plain text file conversion defaults
   config.text_options = {
     font: "Helvetica",          # default: "Courier"
+    font_file: nil,             # default: nil (see "Non-Latin text" below)
     font_size: 12,              # default: 10
     margins: [72, 72, 72, 72],  # default: [50, 50, 50, 50] (points: top, right, bottom, left)
     color: "000000",            # default: "333333" (hex)
@@ -216,6 +217,7 @@ DocPDF.configure do |config|
   # Text watermark defaults (per-stamp options override these)
   config.watermark_options = {
     font: "Times",       # default: "Helvetica"
+    font_file: nil,      # default: nil (see "Non-Latin text" below)
     font_size: 96,       # default: 72
     color: "FF0000",     # default: "AAAAAA" (hex)
     rotation: 30,        # default: 45 (degrees counter-clockwise)
@@ -230,6 +232,43 @@ Converter adapters (for format-to-PDF conversion) are auto-detected based on MIM
 - **Office formats**: LibreOffice (always available if installed)
 - **application/pdf**: Passthrough (returned unchanged)
 - **Unknown formats**: Fallback (tries LibreOffice, then returns raw data)
+
+### Non-Latin text
+
+PDF's built-in fonts only cover the Windows-1252 character set, so text outside it
+(Cyrillic, Greek, CJK, emoji, and many accented forms) cannot be rendered and raises
+`DocPDF::ConversionError`. Point `font_file` at a TrueType font to lift that limit:
+
+```ruby
+DocPDF.configure do |config|
+  config.text_options = config.text_options.merge(
+    font: "DejaVuSans",
+    font_file: "/path/to/DejaVuSans.ttf"
+  )
+end
+
+DocPDF.convert("resume.txt")  # renders Cyrillic, Greek, and more
+```
+
+`font_file` takes a path for the regular weight, or a hash to register several styles:
+
+```ruby
+font_file: {
+  normal:      "/fonts/DejaVuSans.ttf",
+  bold:        "/fonts/DejaVuSans-Bold.ttf",
+  italic:      "/fonts/DejaVuSans-Oblique.ttf",
+  bold_italic: "/fonts/DejaVuSans-BoldOblique.ttf"
+}
+```
+
+The same option works for text watermarks, via `config.watermark_options` or per stamp:
+
+```ruby
+DocPDF.watermark("doc.pdf", { text: "ЧЕРНОВИК", font: "DejaVuSans", font_file: "/fonts/DejaVuSans.ttf" })
+```
+
+A font only renders the characters it actually contains. DejaVu covers Latin, Cyrillic
+and Greek but not CJK, so pick a font that covers the scripts you expect.
 
 ## Adapters
 

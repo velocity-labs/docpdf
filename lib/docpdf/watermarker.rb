@@ -46,7 +46,7 @@ module DocPDF
         merged = STAMP_DEFAULTS.merge(stamp)
         if merged[:text]
           wm = DocPDF.configuration.watermark_options
-          { font: wm[:font], font_size: wm[:font_size], color: wm[:color], rotation: wm[:rotation] }.merge(merged)
+          { font: wm[:font], font_file: wm[:font_file], font_size: wm[:font_size], color: wm[:color], rotation: wm[:rotation] }.merge(merged)
         else
           merged
         end

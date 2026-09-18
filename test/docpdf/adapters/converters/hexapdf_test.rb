@@ -4,6 +4,11 @@ if HEXAPDF_AVAILABLE
   require "docpdf/adapters/converters/hexapdf"
 
   class ConverterHexapdfTest < Minitest::Test
+    def test_convert_renders_non_latin_text_with_a_font_file
+      DocPDF.configure { |c| c.text_options = c.text_options.merge(font: "DejaVuSans", font_file: ttf_font_path) }
+      assert valid_pdf?(DocPDF::Adapters::Converters::Hexapdf.convert(cyrillic_text, nil))
+    end
+
     def test_convert_empty_string
       assert valid_pdf?(DocPDF::Adapters::Converters::Hexapdf.convert("", nil))
     end

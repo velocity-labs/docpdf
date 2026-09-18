@@ -1,5 +1,6 @@
 require "hexapdf"
 require_relative "base"
+require_relative "../../font_files"
 
 module DocPDF
   module Adapters
@@ -22,6 +23,7 @@ module DocPDF
             page_size = normalize_page_size(config.page_size)
 
             doc = HexaPDF::Document.new
+            register_font(doc, opts[:font], opts[:font_file])
             page = doc.pages.add(page_size)
             canvas = page.canvas
 
@@ -50,6 +52,13 @@ module DocPDF
           end
 
           private
+
+          def register_font(doc, name, font_file)
+            map = FontFiles.for_hexapdf(font_file)
+            return unless map
+
+            doc.config["font.map"] = (doc.config["font.map"] || {}).merge(name => map)
+          end
 
           def normalize_page_size(size)
             return size if size.is_a?(Symbol)

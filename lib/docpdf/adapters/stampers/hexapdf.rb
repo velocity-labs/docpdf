@@ -1,5 +1,6 @@
 require "hexapdf"
 require_relative "base"
+require_relative "../../font_files"
 
 module DocPDF
   module Adapters
@@ -88,6 +89,7 @@ module DocPDF
             page_w = page.box.width
             page_h = page.box.height
 
+            register_font(doc, stamp[:font], stamp[:font_file])
             font = doc.fonts.add(stamp[:font])
             glyph_units = font.decode_utf8(stamp[:text]).sum { |g| g.width }
             font_size = fit_font_size(stamp[:font_size], glyph_units, page_w, page_h)
@@ -114,6 +116,13 @@ module DocPDF
                 canvas.text(stamp[:text], at: [-text_w / 2.0, -text_h / 2.0])
               end
             end
+          end
+
+          def register_font(doc, name, font_file)
+            map = FontFiles.for_hexapdf(font_file)
+            return unless map
+
+            doc.config["font.map"] = (doc.config["font.map"] || {}).merge(name => map)
           end
 
           def write_to_string(doc)

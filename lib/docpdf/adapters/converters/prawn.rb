@@ -1,6 +1,7 @@
 require "prawn"
 require_relative "base"
 require_relative "../../prawn_errors"
+require_relative "../../font_files"
 
 module DocPDF
   module Adapters
@@ -20,6 +21,7 @@ module DocPDF
             opts = config.text_options
             content = normalize(data)
             pdf = ::Prawn::Document.new(page_size: config.page_size, margin: opts[:margins])
+            register_font(pdf, opts[:font], opts[:font_file])
             pdf.font(opts[:font], size: opts[:font_size])
             pdf.text content, color: opts[:color]
             pdf.render
@@ -28,6 +30,13 @@ module DocPDF
           end
 
           private
+
+          def register_font(pdf, name, font_file)
+            families = FontFiles.for_prawn(font_file)
+            return unless families
+
+            pdf.font_families.update(name => families)
+          end
 
           def normalize(data)
             data.dup.force_encoding("UTF-8").gsub(LINE_SEPARATORS, "\n")
