@@ -9,6 +9,7 @@ module DocPDF
           def stamp(data, stamps, page_indices: nil)
             doc = HexaPDF::Document.new(io: StringIO.new(data))
             source_page = doc.pages[0]
+            raise ConversionError, "Cannot stamp a PDF with no pages" unless source_page
             page_w = source_page.box.width
             page_h = source_page.box.height
 

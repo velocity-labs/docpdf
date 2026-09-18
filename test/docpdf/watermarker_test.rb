@@ -149,6 +149,14 @@ if STAMPER_AVAILABLE
       end
     end
 
+    def test_raises_for_pdf_with_no_pages
+      assert_raises(DocPDF::ConversionError) { DocPDF::Watermarker.call(no_pages_pdf, { image: img }) }
+    end
+
+    def test_raises_for_pdf_with_no_pages_when_targeting_specific_pages
+      assert_raises(DocPDF::ConversionError) { DocPDF::Watermarker.call(no_pages_pdf, { image: img, pages: :first }) }
+    end
+
     def test_raises_for_unsupported_type
       assert_raises(ArgumentError) { DocPDF::Watermarker.call(12345, { image: img }) }
     end

@@ -1,5 +1,10 @@
 # Changelog
 
+## [Unreleased]
+
+### Fixed
+- Watermarking a structurally valid PDF with an empty page tree raised `NoMethodError` instead of a `DocPDF::ConversionError`. Both stampers and the per-page watermark path now raise `ConversionError` with a clear message.
+
 ## [0.1.4] - 2026-04-08
 
 ### Fixed

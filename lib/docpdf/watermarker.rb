@@ -138,6 +138,8 @@ module DocPDF
 
     def stamp_per_page(stamper)
       page_count = pdf_page_count
+      raise ConversionError, "Cannot stamp a PDF with no pages" if page_count.zero?
+
       result = @pdf_bytes
 
       build_page_stamp_map(page_count).each do |page_indices, stamps_for_pages|

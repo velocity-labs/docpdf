@@ -10,6 +10,7 @@ module DocPDF
           def stamp(data, stamps, page_indices: nil)
             source = ::CombinePDF.parse(data)
             source_page = source.pages.first
+            raise ConversionError, "Cannot stamp a PDF with no pages" unless source_page
             page_w = source_page[:MediaBox][2].to_f
             page_h = source_page[:MediaBox][3].to_f
 

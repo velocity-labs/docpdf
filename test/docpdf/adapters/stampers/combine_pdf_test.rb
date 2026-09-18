@@ -36,6 +36,13 @@ if COMBINE_PDF_AVAILABLE && PRAWN_AVAILABLE
       assert valid_pdf?(result)
     end
 
+    def test_stamp_raises_on_pdf_with_no_pages
+      error = assert_raises(DocPDF::ConversionError) do
+        DocPDF::Adapters::Stampers::CombinePdf.stamp(no_pages_pdf, [stamp])
+      end
+      assert_match(/no pages/, error.message)
+    end
+
     def test_text_stamp_produces_valid_pdf
       result = DocPDF::Adapters::Stampers::CombinePdf.stamp(sample_pdf, [text_stamp])
       assert valid_pdf?(result)

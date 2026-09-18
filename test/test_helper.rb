@@ -25,6 +25,10 @@ def multi_page_pdf
   fixture_data("test_multipage.pdf")
 end
 
+def no_pages_pdf
+  fixture_data("test_no_pages.pdf")
+end
+
 def pdf_page_count(data)
   reader = PDF::Reader.new(StringIO.new(data))
   reader.page_count

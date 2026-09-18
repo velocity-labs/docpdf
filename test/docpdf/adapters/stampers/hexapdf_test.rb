@@ -36,6 +36,13 @@ if HEXAPDF_AVAILABLE
       assert valid_pdf?(result)
     end
 
+    def test_stamp_raises_on_pdf_with_no_pages
+      error = assert_raises(DocPDF::ConversionError) do
+        DocPDF::Adapters::Stampers::Hexapdf.stamp(no_pages_pdf, [stamp])
+      end
+      assert_match(/no pages/, error.message)
+    end
+
     def test_stamp_symbol_page_size
       DocPDF.configure { |c| c.page_size = :Letter }
       result = DocPDF::Adapters::Stampers::Hexapdf.stamp(sample_pdf, [stamp])
