@@ -197,6 +197,11 @@ DocPDF.configure do |config|
   # Stamper adapter for watermarking (default: nil, auto-detects hexapdf then combine_pdf)
   config.stamper = :hexapdf  # or :combine_pdf
 
+  # Preferred converter adapter (default: nil, uses registration order)
+  # Only applies to the MIME types that adapter registered for; everything else
+  # still resolves normally, so this will not affect Word or image conversion.
+  config.converter = :hexapdf  # or :prawn, :rmagick, :mini_magick, ...
+
   # Page size (default: "LETTER")
   config.page_size = "A4"
 
@@ -220,7 +225,7 @@ end
 
 Converter adapters (for format-to-PDF conversion) are auto-detected based on MIME type and gem availability. The first available adapter wins, in registration order:
 
-- **text/plain**: Prawn, then HexaPDF
+- **text/plain**: Prawn, then HexaPDF (set `config.converter` to reverse this)
 - **image/\***: RMagick, then MiniMagick
 - **Office formats**: LibreOffice (always available if installed)
 - **application/pdf**: Passthrough (returned unchanged)
@@ -235,8 +240,8 @@ DocPDF has two types of adapters:
 | Adapter | Gem | Formats |
 |---------|-----|---------|
 | Soffice | None (system) | Word, Excel, PowerPoint, ODF, CSV, HTML, RTF |
-| Prawn | `prawn` | Plain text |
-| HexaPDF | `hexapdf` | Plain text |
+| Prawn | `prawn` | Plain text (wraps long lines; built-in fonts are Windows-1252 only) |
+| HexaPDF | `hexapdf` | Plain text (wider character support; does not wrap long lines) |
 | RMagick | `rmagick` | JPEG, PNG, HEIC, WebP |
 | MiniMagick | `mini_magick` | JPEG, PNG, HEIC, WebP |
 | Passthrough | None | PDF (returned unchanged) |

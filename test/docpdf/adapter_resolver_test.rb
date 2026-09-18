@@ -26,6 +26,35 @@ class ConverterResolverTest < Minitest::Test
     assert_equal "DocPDF::Adapters::Converters::Soffice", adapter.name
   end
 
+  def test_raises_for_unknown_converter_with_valid_options
+    DocPDF.configure { |c| c.converter = :nonexistent }
+    error = assert_raises(DocPDF::AdapterNotFoundError) { DocPDF::ConverterResolver.resolve("text/plain") }
+    assert_match(/Unknown converter/, error.message)
+    assert_match(/prawn/, error.message)
+  end
+
+  if HEXAPDF_AVAILABLE && PRAWN_AVAILABLE
+    def test_configured_converter_overrides_registration_order
+      DocPDF.configure { |c| c.converter = :hexapdf }
+      adapter = DocPDF::ConverterResolver.resolve("text/plain")
+      assert_equal "DocPDF::Adapters::Converters::Hexapdf", adapter.name
+    end
+
+    def test_configured_converter_ignored_for_mime_type_it_does_not_handle
+      DocPDF.configure { |c| c.converter = :hexapdf }
+      adapter = DocPDF::ConverterResolver.resolve("application/pdf")
+      assert_equal "DocPDF::Adapters::Converters::Passthrough", adapter.name
+    end
+  end
+
+  unless HEXAPDF_AVAILABLE
+    def test_raises_when_configured_converter_gem_is_missing
+      DocPDF.configure { |c| c.converter = :hexapdf }
+      error = assert_raises(DocPDF::AdapterNotFoundError) { DocPDF::ConverterResolver.resolve("text/plain") }
+      assert_match(/hexapdf/, error.message)
+    end
+  end
+
   if PRAWN_AVAILABLE
     def test_resolves_prawn_for_text
       adapter = DocPDF::ConverterResolver.resolve("text/plain")

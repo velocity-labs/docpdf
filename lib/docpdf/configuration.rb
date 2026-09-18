@@ -1,6 +1,7 @@
 module DocPDF
   class Configuration
     attr_accessor :soffice_path,
+                  :converter,
                   :stamper,
                   :page_size,
                   :text_options,
@@ -22,6 +23,7 @@ module DocPDF
 
     def initialize
       @soffice_path      = "soffice"
+      @converter          = nil
       @stamper            = nil
       @page_size          = "LETTER"
       @text_options       = TEXT_DEFAULTS.dup

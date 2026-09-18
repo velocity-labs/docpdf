@@ -25,6 +25,10 @@ class ConfigurationTest < Minitest::Test
     assert_equal 45, opts[:rotation]
   end
 
+  def test_nil_converter_default
+    assert_nil DocPDF::Configuration.new.converter
+  end
+
   def test_nil_stamper_default
     assert_nil DocPDF::Configuration.new.stamper
   end

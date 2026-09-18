@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Added
+- `config.converter` selects a preferred converter adapter, mirroring `config.stamper`. It only claims the mime types that adapter registered for, so everything else still resolves in registration order and `config.converter = :hexapdf` does not disturb Word or image conversion.
+
 ### Fixed
 - Watermarking a structurally valid PDF with an empty page tree raised `NoMethodError` instead of a `DocPDF::ConversionError`. Both stampers and the per-page watermark path now raise `ConversionError` with a clear message.
 

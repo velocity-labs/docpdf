@@ -8,12 +8,44 @@ module DocPDF
       end
 
       def resolve(mime_type)
+        configured = DocPDF.configuration.converter
+        return resolve_configured(configured, mime_type) if configured
+
+        resolve_registered(mime_type)
+      end
+
+      private
+
+      def load_adapter(entry)
+        require entry[:require_name] if entry[:require_name]
+        entry[:loader].call
+      end
+
+      # A configured converter only claims the mime types it registered for, so
+      # anything else still falls through to the normal registration order. That
+      # keeps config.converter = :hexapdf from breaking Word conversion.
+      def resolve_configured(name, mime_type)
+        entry = @adapters.find { |e| e[:name] == name }
+        unless entry
+          valid_names = @adapters.map { |e| e[:name].inspect }.join(", ")
+          raise AdapterNotFoundError, "Unknown converter: #{name.inspect}. Valid converters are: #{valid_names}."
+        end
+
+        return resolve_registered(mime_type) unless entry[:mime_types].include?(mime_type)
+
+        begin
+          load_adapter(entry)
+        rescue LoadError => e
+          raise AdapterNotFoundError, "Converter #{name.inspect} requires gems that are not installed: #{e.message}"
+        end
+      end
+
+      def resolve_registered(mime_type)
         missing_gems = []
 
         @adapters.each do |entry|
           next unless entry[:mime_types].include?(mime_type)
-          require entry[:require_name] if entry[:require_name]
-          return entry[:loader].call
+          return load_adapter(entry)
         rescue LoadError
           missing_gems << entry[:require_name]
           next
@@ -26,8 +58,6 @@ module DocPDF
 
         resolve_fallback
       end
-
-      private
 
       def resolve_fallback
         entry = @adapters.find { |e| e[:name] == :fallback }
