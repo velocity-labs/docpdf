@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.6] - 2026-09-18
 
 ### Added
 - `font_file` registers a TrueType font for text conversion (`config.text_options`) and text watermarks (`config.watermark_options`, or per stamp). PDF's built-in fonts are limited to Windows-1252, so Cyrillic, Greek and other non-Latin text previously raised `ConversionError` with no way around it. Takes a path for the regular weight or a hash of `normal`/`bold`/`italic`/`bold_italic`, and is supported by both text converters and both stampers.
