@@ -1,3 +1,5 @@
+require "pathname"
+
 module DocPDF
   class InputNormalizer
     attr_reader :data, :filename, :source_filename, :mime_type

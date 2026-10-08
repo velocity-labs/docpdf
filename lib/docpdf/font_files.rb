@@ -1,3 +1,5 @@
+require "pathname"
+
 module DocPDF
   # Prawn's built-in AFM fonts only cover Windows-1252, so any text outside it
   # fails to render. Pointing an adapter at a TrueType file lifts that limit.

@@ -1,3 +1,5 @@
+require "pathname"
+
 module DocPDF
   class Watermarker
     POSITIONS = %i[center top bottom left right top_left top_right bottom_left bottom_right].freeze

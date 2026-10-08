@@ -4,6 +4,7 @@
 
 ### Fixed
 - The HexaPDF stamper raised `ConversionError` on PDFs with spec violations HexaPDF cannot correct, even though viewers render them fine. One example is a tagged PDF exported from Canva with a structure element missing its parent. The stamper now corrects what HexaPDF can and writes the rest as it came in, the way the `hexapdf` CLI does.
+- `DocPDF.convert` raised `NameError: uninitialized constant DocPDF::InputNormalizer::Pathname` on Ruby 3.3 and 3.4 when nothing else had loaded `pathname`. Bundler and Rails both load it, so only plain Ruby scripts were affected. `DocPDF.watermark` with a file path and `font_file` given as a hash hit the same error. DocPDF now requires `pathname` itself.
 
 ## [0.1.6] - 2026-09-18
 

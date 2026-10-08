@@ -1,4 +1,6 @@
 require "test_helper"
+require "bundler"
+require "open3"
 
 class DocPDFTest < Minitest::Test
   def test_configuration_returns_configuration_instance
@@ -27,6 +29,23 @@ class DocPDFTest < Minitest::Test
     DocPDF.configure { |c| c.page_size = "A4" }
     DocPDF.reset_configuration!
     assert_equal "LETTER", DocPDF.configuration.page_size
+  end
+
+  # Bundler and Rails both load pathname, so a missing require only shows up in
+  # a plain Ruby process. Ruby 4.0 loads Pathname by default, so only 3.x runs
+  # can catch it.
+  def test_works_in_plain_ruby_without_bundler
+    script = <<~RUBY
+      require "docpdf"
+      DocPDF.convert(ARGV[0])
+      DocPDF.watermark(ARGV[0])
+      DocPDF::FontFiles.normalize({ normal: ARGV[0] })
+      print "ok"
+    RUBY
+    lib = File.expand_path("../lib", __dir__)
+    out, err, status = Bundler.with_unbundled_env { Open3.capture3(RbConfig.ruby, "-I", lib, "-e", script, fixture_path("test.pdf")) }
+    assert status.success?, err
+    assert_equal "ok", out
   end
 
   if STAMPER_AVAILABLE
