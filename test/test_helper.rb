@@ -37,6 +37,14 @@ def no_pages_pdf
   fixture_data("test_no_pages.pdf")
 end
 
+def invalid_page_layout_pdf
+  fixture_data("test_invalid_page_layout.pdf")
+end
+
+def struct_elem_without_parent_pdf
+  fixture_data("test_struct_elem_without_parent.pdf")
+end
+
 def pdf_page_count(data)
   reader = PDF::Reader.new(StringIO.new(data))
   reader.page_count

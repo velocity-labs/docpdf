@@ -22,7 +22,7 @@ module DocPDF
               page.canvas(type: :overlay).xobject(stamp_form, at: [0, 0]) if page_indices.nil? || page_indices.include?(idx)
             end
 
-            write_to_string(doc)
+            write_to_string_leniently(doc)
           rescue HexaPDF::Error, Errno::ENOENT => e
             raise ConversionError, "HexaPDF failed to stamp PDF: #{e.message}"
           end
@@ -125,10 +125,22 @@ module DocPDF
             doc.config["font.map"] = (doc.config["font.map"] || {}).merge(name => map)
           end
 
-          def write_to_string(doc)
+          def write_to_string(doc, **write_options)
             io = StringIO.new
-            doc.write(io)
+            doc.write(io, **write_options)
             io.string
+          end
+
+          # The caller's PDF may break the spec in ways HexaPDF cannot repair, like a
+          # tagged PDF whose structure elements have no parent. Viewers open those
+          # fine, so correct what can be corrected and write the rest as it came in,
+          # the way the hexapdf CLI does. Objects are validated one at a time because
+          # Document#validate stops at the first one it cannot correct, and the stamp
+          # form only becomes an indirect object when validation reaches its page.
+          def write_to_string_leniently(doc)
+            doc.trailer.validate(auto_correct: true)
+            doc.each { |obj| obj.validate(auto_correct: true) }
+            write_to_string(doc, validate: false)
           end
         end
       end

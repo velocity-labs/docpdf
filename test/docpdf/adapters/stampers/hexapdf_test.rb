@@ -55,6 +55,20 @@ if HEXAPDF_AVAILABLE
       assert valid_pdf?(result)
     end
 
+    # The catalog is validated before the page holding the stamp, and the stamp
+    # form only becomes an indirect object once validation reaches that page.
+    def test_stamp_tolerates_an_uncorrectable_problem_ahead_of_the_pages
+      result = DocPDF::Adapters::Stampers::Hexapdf.stamp(invalid_page_layout_pdf, [stamp])
+      refute_nil HexaPDF::Document.new(io: StringIO.new(result)).pages[0].resources[:XObject]
+    end
+
+    def test_stamp_tolerates_structure_elements_without_a_parent
+      result = DocPDF::Adapters::Stampers::Hexapdf.stamp(struct_elem_without_parent_pdf, [stamp])
+      doc = HexaPDF::Document.new(io: StringIO.new(result))
+      refute_nil doc.pages[0].resources[:XObject]
+      assert doc.catalog.key?(:StructTreeRoot)
+    end
+
     def test_stamp_with_offsets
       result = DocPDF::Adapters::Stampers::Hexapdf.stamp(sample_pdf, [stamp(position: :top_right, offset_x: -20, offset_y: -20)])
       assert valid_pdf?(result)

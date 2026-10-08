@@ -1,5 +1,10 @@
 # Changelog
 
+## [Unreleased]
+
+### Fixed
+- The HexaPDF stamper raised `ConversionError` on PDFs with spec violations HexaPDF cannot correct, even though viewers render them fine. One example is a tagged PDF exported from Canva with a structure element missing its parent. The stamper now corrects what HexaPDF can and writes the rest as it came in, the way the `hexapdf` CLI does.
+
 ## [0.1.6] - 2026-09-18
 
 ### Added
