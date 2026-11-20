@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.2.0] - 2026-11-20
 
 ### Changed
 - Image conversion now prepares photos for documents by default: photos are turned upright from their EXIF orientation, stripped of metadata (including GPS location), flattened onto white, shrunk to at most 2400 pixels per side, and placed on a page whose long edge is 11 inches. Previously a page was one point per pixel, so a 12-megapixel phone photo became a 56-inch page, and sideways photos stayed sideways. Configure with `config.image_options`; `page_long_edge: nil` restores one point per pixel. Both RMagick and MiniMagick adapters apply the same steps.
