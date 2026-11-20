@@ -1,5 +1,14 @@
 # Changelog
 
+## [Unreleased]
+
+### Changed
+- Image conversion now prepares photos for documents by default: photos are turned upright from their EXIF orientation, stripped of metadata (including GPS location), flattened onto white, shrunk to at most 2400 pixels per side, and placed on a page whose long edge is 11 inches. Previously a page was one point per pixel, so a 12-megapixel phone photo became a 56-inch page, and sideways photos stayed sideways. Configure with `config.image_options`; `page_long_edge: nil` restores one point per pixel. Both RMagick and MiniMagick adapters apply the same steps.
+- The MiniMagick adapter converts only the first frame of multi-frame images.
+
+### Added
+- `config.soffice_timeout` (default 120 seconds) kills LibreOffice, and everything it started, when a conversion runs too long, raising `ConversionError`. Previously a document that made LibreOffice hang blocked the caller forever. Set it to `nil` for the old behavior.
+
 ## [0.1.7] - 2026-10-08
 
 ### Fixed

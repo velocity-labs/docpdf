@@ -45,4 +45,34 @@ class ConverterSofficeTest < Minitest::Test
       DocPDF::Adapters::Converters::Soffice.convert("fake", "bad.doc")
     end
   end
+
+  def test_kills_soffice_after_the_timeout
+    script = Tempfile.new(["slow_soffice", ".sh"])
+    script.write("#!/bin/sh\nsleep 30 &\nwait\n")
+    script.close
+    File.chmod(0o755, script.path)
+
+    DocPDF.configure do |c|
+      c.soffice_path = script.path
+      c.soffice_timeout = 0.5
+    end
+    started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+    error = assert_raises(DocPDF::ConversionError) do
+      DocPDF::Adapters::Converters::Soffice.convert("fake", "slow.docx")
+    end
+    assert_match(/timed out after 0.5s converting slow\.docx/, error.message)
+    assert_operator Process.clock_gettime(Process::CLOCK_MONOTONIC) - started, :<, 5
+  ensure
+    DocPDF.reset_configuration!
+    script&.unlink
+  end
+
+  def test_missing_soffice_still_raises_not_found
+    DocPDF.configure { |c| c.soffice_path = "/nonexistent/soffice" }
+    assert_raises(DocPDF::SofficeNotFoundError) do
+      DocPDF::Adapters::Converters::Soffice.convert("fake", "a.docx")
+    end
+  ensure
+    DocPDF.reset_configuration!
+  end
 end

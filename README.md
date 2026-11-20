@@ -194,6 +194,9 @@ DocPDF.configure do |config|
   # LibreOffice binary path (default: "soffice", found via PATH)
   config.soffice_path = "/usr/bin/soffice"
 
+  # Seconds before a LibreOffice conversion is killed (default: 120; nil waits forever)
+  config.soffice_timeout = 60
+
   # Stamper adapter for watermarking (default: nil, auto-detects hexapdf then combine_pdf)
   config.stamper = :hexapdf  # or :combine_pdf
 
@@ -212,6 +215,16 @@ DocPDF.configure do |config|
     font_size: 12,              # default: 10
     margins: [72, 72, 72, 72],  # default: [50, 50, 50, 50] (points: top, right, bottom, left)
     color: "000000",            # default: "333333" (hex)
+  }
+
+  # Image (photo/scan) conversion defaults
+  config.image_options = {
+    auto_orient: true,    # turn photos upright from their EXIF orientation
+    strip: true,          # drop EXIF and other metadata (camera, GPS location)
+    background: "white",  # flatten transparency onto this color (nil keeps alpha)
+    max_edge: 2400,       # shrink so neither side exceeds this many pixels (nil: never)
+    page_long_edge: 11,   # page's long edge in inches (nil: one point per pixel)
+    quality: 85,          # JPEG quality inside the PDF (nil: ImageMagick default)
   }
 
   # Text watermark defaults (per-stamp options override these)
